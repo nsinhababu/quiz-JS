@@ -6,11 +6,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>coding quiz</title>
     <link rel="stylesheet" href="./index.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
   </head>
+
   <body>
     <header class="header">
-      <button class="header__scores"></button>
+      <button class="header__high-score-btn fas fa-hand-point-left fa-lg">
+        View Highscores
+      </button>
+
+      <div class="header__timer-container">
+        Timer: <span class="header__timer"></span>
+      </div>
     </header>
+
+    <main>
+      <div class="wrapper quiz__border-shadow">
+        <h1 class="wrapper__heading">Coding Quiz Challange</h1>
+
+        <p class="wrapper__para">
+          Try to answer to following code-related questions within the time
+          limit
+        </p>
+
+        <p class="wrapper__para">
+          Keep in mind that incorrect answers will penalize your score/time by
+          ten seconds!
+        </p>
+
+        <button type="button" class="wrapper__btn start-quiz">
+          Start Quiz
+        </button>
+      </div>
+
+      <div class="high-score-container quiz__border-shadow">
+        <h2>Highscores</h2>
+        <div class="high-scores"></div>
+
+        <button type="button" class="wrapper__btn go-back-btn">Go Back</button>
+
+        <button type="button" class="wrapper__btn clear-score-btn">
+          Clear Highscores
+        </button>
+      </div>
+
+      <div class="questions-options-container quiz__border-shadow">
+        <h2 class="question"></h2>
+        <h3 class="options"></h3>
+        <h3 class="options"></h3>
+        <h3 class="options"></h3>
+        <h3 class="options"></h3>
+        <span class="result"></span>
+      </div>
+    </main>
+
     <script src="./index.js"></script>
   </body>
 </html>
