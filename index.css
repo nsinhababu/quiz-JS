@@ -25,6 +25,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 25px;
 }
 .wrapper {
   width: 750px;
@@ -71,4 +72,10 @@ main {
   box-shadow: 10px 6px 5px rgba(169, 169, 169, 0.747);
   border: 2px solid rgba(169, 169, 169, 0.63);
   border-radius: 30px;
+}
+.options-para {
+  background-color: #218380;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
 }

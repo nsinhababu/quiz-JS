@@ -45,10 +45,14 @@ const timerScreen = document.querySelector('.header__timer');
 const highScoreBtn = document.querySelector('.header__high-score-btn');
 const goBackBtn = document.querySelector('.go-back-btn');
 const startBtn = document.querySelector('.start-quiz');
+const main = document.querySelector('.main');
 let time = 10;
-
-const questionElement = document.querySelector('.question');
-let optionsElementArr = Array.from(document.querySelectorAll('.options'));
+let questionNumber = 0;
+let clickDecidingNumber = 0;
+let questionOptionContainer;
+let questionElement;
+let optionElement;
+let optionBtn;
 
 function contentController(param1, param2, param3) {
   param1.addEventListener('click', () => {
@@ -60,31 +64,63 @@ function contentController(param1, param2, param3) {
 let quizInterval;
 
 function quizTimer() {
-  debugger;
   if (time === 0) {
     clearInterval(quizInterval);
     quizInterval = null;
-    console.log('Time up!');
     return;
   }
   time--;
   timerScreen.innerText = `${time} s`;
 }
 
+function elementCreator(elementType, newElem, ParentElem, newElemClass) {
+  newElem = document.createElement(elementType);
+  ParentElem.appendChild(newElem);
+  newElem.classList.add(newElemClass);
+}
+
 window.addEventListener('DOMContentLoaded', (event) => {
   timerScreen.innerText = `${time} s`;
 });
 
+contentController(highScoreBtn, wrapper, highScoreContainer);
+contentController(goBackBtn, highScoreContainer, wrapper);
+
 startBtn.addEventListener('click', () => {
   wrapper.style.display = 'none';
-  debugger;
   if (!quizInterval) {
     quizInterval = setInterval(quizTimer, 1000);
   }
-  questionElement.innerText = questions[0].questionText;
-  optionsElementArr.forEach((item, index) => {
-    // item.innerText = questions.options[index];
+
+  elementCreator('div', questionOptionContainer, main, 'q-o-container');
+  questionOptionContainer = document.querySelector('.q-o-container');
+  questionOptionContainer.classList.add('quiz__border-shadow');
+
+  elementCreator(
+    'p',
+    questionElement,
+    questionOptionContainer,
+    'question-para'
+  );
+
+  document.querySelector('.question-para').innerText =
+    questions[questionNumber].questionText;
+
+  questions[questionNumber].options.forEach((item, index) => {
+    elementCreator('p', optionElement, questionOptionContainer, 'options-para');
+
+    document.querySelectorAll('.options-para')[index].innerText =
+      questions[questionNumber].options[index];
   });
+  clickDecidingNumber++;
 });
-contentController(highScoreBtn, wrapper, highScoreContainer);
-contentController(goBackBtn, highScoreContainer, wrapper);
+
+if (clickDecidingNumber === 1) {
+  optionBtn = document.querySelectorAll('.options-para');
+  for (let i in optionBtn) {
+    optionBtn[i].addEventListener('click', () => {
+      questionNumber++;
+      console.log(questionNumber);
+    });
+  }
+}
