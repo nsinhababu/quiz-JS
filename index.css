@@ -73,9 +73,42 @@ main {
   border: 2px solid rgba(169, 169, 169, 0.63);
   border-radius: 30px;
 }
-.options-para {
+.question-header {
+  font-size: 1.5rem;
+  text-align: center;
+}
+.options-btn {
   background-color: #218380;
   color: #fff;
   padding: 8px 12px;
   border-radius: 8px;
+  margin: 10px;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1rem;
+  padding: 15px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.q-o-container {
+  display: flex;
+  width: 100%;
+  max-width: 600px;
+  flex-direction: column;
+  padding: 30px;
+}
+.score__board {
+  width: 600px;
+  height: 380px;
+  padding: 30px 80px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-sizing: border-box;
+}
+.score__board-name-inp {
+  width: 100px;
+  height: 28px;
 }

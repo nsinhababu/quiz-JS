@@ -46,13 +46,21 @@ const highScoreBtn = document.querySelector('.header__high-score-btn');
 const goBackBtn = document.querySelector('.go-back-btn');
 const startBtn = document.querySelector('.start-quiz');
 const main = document.querySelector('.main');
-let time = 10;
+let time = 50;
+let myScore = 0;
 let questionNumber = 0;
-let clickDecidingNumber = 0;
 let questionOptionContainer;
-let questionElement;
-let optionElement;
-let optionBtn;
+let answerStatusDiv;
+const statusObj = {
+  correct: {
+    label: 'Correct Answer!',
+    color: 'green',
+  },
+  incorrect: {
+    label: 'Incorrect Answer!',
+    color: 'red',
+  },
+};
 
 function contentController(param1, param2, param3) {
   param1.addEventListener('click', () => {
@@ -73,13 +81,24 @@ function quizTimer() {
   timerScreen.innerText = `${time} s`;
 }
 
-function elementCreator(elementType, newElem, ParentElem, newElemClass) {
-  newElem = document.createElement(elementType);
+const setValues = () => {
+  // Setting value of question
+
+  const question = questionOptionContainer.children;
+  question[0].innerText = questions[questionNumber].questionText;
+  questions[questionNumber].options.forEach((item, index) => {
+    question[index + 1].innerText = questions[questionNumber].options[index];
+  });
+};
+
+// Creates new elements Fn: takes parent elem, tag and class as params
+function elementCreator(elementType, ParentElem, newElemClass) {
+  const newElem = document.createElement(elementType);
   ParentElem.appendChild(newElem);
   newElem.classList.add(newElemClass);
 }
 
-window.addEventListener('DOMContentLoaded', (event) => {
+window.addEventListener('DOMContentLoaded', () => {
   timerScreen.innerText = `${time} s`;
 });
 
@@ -92,35 +111,50 @@ startBtn.addEventListener('click', () => {
     quizInterval = setInterval(quizTimer, 1000);
   }
 
-  elementCreator('div', questionOptionContainer, main, 'q-o-container');
+  // Creating container for questions and answers
+  elementCreator('div', main, 'q-o-container');
+
   questionOptionContainer = document.querySelector('.q-o-container');
   questionOptionContainer.classList.add('quiz__border-shadow');
 
-  elementCreator(
-    'p',
-    questionElement,
-    questionOptionContainer,
-    'question-para'
-  );
+  // Question
+  elementCreator('h3', questionOptionContainer, 'question-header');
 
-  document.querySelector('.question-para').innerText =
-    questions[questionNumber].questionText;
+  // //creating correct incorrect div
+  // elementCreator('div', questionOptionContainer, 'answer-status');
+  // answerStatusDiv = document.querySelector('.answer-status');
 
+  // Adding event listeners to btn and setting value
   questions[questionNumber].options.forEach((item, index) => {
-    elementCreator('p', optionElement, questionOptionContainer, 'options-para');
+    elementCreator('button', questionOptionContainer, 'options-btn');
 
-    document.querySelectorAll('.options-para')[index].innerText =
-      questions[questionNumber].options[index];
+    const option = questionOptionContainer.childNodes[index + 1];
+    option.addEventListener('click', (e) => {
+      if (questionNumber === questions.length - 1) {
+        questionOptionContainer.style.display = 'none';
+        const scoreBoard = document.querySelector('.score__board');
+        scoreBoard.style.display = 'flex';
+        const finalScore = document.querySelector('.score__board-score');
+        finalScore.innerText = myScore;
+        return;
+      }
+      const value = e.target.innerText.toLowerCase();
+      const isCorrectAnswer = value === questions[questionNumber].answer;
+      if (isCorrectAnswer) {
+        myScore += 10;
+        // answerStatusDiv.innerText = 'Correct';
+        // answerStatusDiv.style.color = 'green';
+      } else {
+        time -= 10;
+        timerScreen.innerText = `${time} s`;
+        // answerStatusDiv.innerText = 'Incorrect';
+        // answerStatusDiv.style.color = 'red';
+      }
+      questionNumber++;
+      setValues();
+    });
   });
-  clickDecidingNumber++;
+  setValues();
 });
 
-if (clickDecidingNumber === 1) {
-  optionBtn = document.querySelectorAll('.options-para');
-  for (let i in optionBtn) {
-    optionBtn[i].addEventListener('click', () => {
-      questionNumber++;
-      console.log(questionNumber);
-    });
-  }
-}
+const submitBtn = document.querySelector('.submit-btn');
