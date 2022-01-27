@@ -38,29 +38,30 @@ const questions = [
     answer: '1. break',
   },
 ];
-
+let arr = [];
 const wrapper = document.querySelector('.wrapper');
 const highScoreContainer = document.querySelector('.high-score-container');
 const timerScreen = document.querySelector('.header__timer');
+
+//buttons
 const highScoreBtn = document.querySelector('.header__high-score-btn');
 const goBackBtn = document.querySelector('.go-back-btn');
 const startBtn = document.querySelector('.start-quiz');
+const submitBtn = document.querySelector('.submit-btn');
+const clrBtn = document.querySelector('.clear-score-btn');
+const formInput = document.querySelector('.score__board-name-inp');
+const submitForm = document.querySelector('.submit-form');
 const main = document.querySelector('.main');
 let time = 50;
 let myScore = 0;
 let questionNumber = 0;
 let questionOptionContainer;
 let answerStatusDiv;
-const statusObj = {
-  correct: {
-    label: 'Correct Answer!',
-    color: 'green',
-  },
-  incorrect: {
-    label: 'Incorrect Answer!',
-    color: 'red',
-  },
-};
+let finalScore;
+let scoreBoard = document.querySelector('.score__board');
+const highScoreDisplay = document.querySelector('.high-scores');
+
+let playerObj;
 
 function contentController(param1, param2, param3) {
   param1.addEventListener('click', () => {
@@ -100,11 +101,14 @@ function elementCreator(elementType, ParentElem, newElemClass) {
 
 window.addEventListener('DOMContentLoaded', () => {
   timerScreen.innerText = `${time} s`;
+  const users = localStorage.getItem('users');
+  arr = users ? JSON.parse(users) : [];
 });
 
 contentController(highScoreBtn, wrapper, highScoreContainer);
 contentController(goBackBtn, highScoreContainer, wrapper);
 
+// start quiz
 startBtn.addEventListener('click', () => {
   wrapper.style.display = 'none';
   if (!quizInterval) {
@@ -132,9 +136,9 @@ startBtn.addEventListener('click', () => {
     option.addEventListener('click', (e) => {
       if (questionNumber === questions.length - 1) {
         questionOptionContainer.style.display = 'none';
-        const scoreBoard = document.querySelector('.score__board');
+        // scoreBoard = document.querySelector('.score__board');
         scoreBoard.style.display = 'flex';
-        const finalScore = document.querySelector('.score__board-score');
+        finalScore = document.querySelector('.score__board-score');
         finalScore.innerText = myScore;
         return;
       }
@@ -157,4 +161,36 @@ startBtn.addEventListener('click', () => {
   setValues();
 });
 
-const submitBtn = document.querySelector('.submit-btn');
+// submit scores
+submitForm.addEventListener('submit', (e) => {
+  // debugger;
+  e.preventDefault();
+
+  let playerObj = {
+    initials: formInput.value,
+    score: myScore,
+  };
+  arr.push(playerObj);
+  const arrString = JSON.stringify(arr);
+  localStorage.setItem('users', arrString);
+  arr = arr.sort((a, b) => {
+    return b.score - a.score;
+  });
+  console.log(arr);
+  highScoreContainer.style.display = 'block';
+  highScoreDisplay.innerText = `${arr[0].initials} : ${arr[0].score}`;
+  scoreBoard.style.display = 'none';
+  // console.log(formInput.value);
+  // localStorage.setItem('initials', `${formInput.value}:${myScore}`);
+  // const score = localStorage.getItem('initials');
+  // document.querySelector('.score__board').style.display = 'none';
+});
+
+// clear highscores
+clrBtn.addEventListener('click', () => {
+  localStorage.clear();
+  highScoreDisplay.innerText = '';
+  console.log(clrBtn);
+});
+// highScoreDisplay.innerText = `${arr[0].initials} : ${arr[0].score}`;
+// console.log(clrBtn);
