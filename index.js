@@ -78,6 +78,11 @@ const showScores = () => {
 
 function contentController(param1, param2, param3) {
   param1.addEventListener('click', () => {
+    if (param1 == goBackBtn) {
+      time = 50;
+      timerScreen.innerText = `${time} s`;
+      questionOptionContainer.style.display = 'none';
+    }
     param2.style.display = 'none';
     param3.style.display = 'block';
     isQuizFinished = true;
