@@ -59,21 +59,36 @@ let questionOptionContainer;
 let answerStatusDiv;
 let finalScore;
 let scoreBoard = document.querySelector('.score__board');
+const scoresContainer = document.querySelector('scores');
 const highScoreDisplay = document.querySelector('.high-scores');
+let isQuizFinished = false;
 
 let playerObj;
+
+const showScores = () => {
+  // debugger;
+  arr.forEach((score, scoreIndex) => {
+    // elementCreator('div', scoresContainer, 'scores');
+    console.log(scoreIndex);
+    highScoreDisplay.innerHTML += `<div>${scoreIndex + 1}.${
+      arr[scoreIndex].initials
+    } : ${arr[scoreIndex].score}</div>`;
+  });
+};
 
 function contentController(param1, param2, param3) {
   param1.addEventListener('click', () => {
     param2.style.display = 'none';
     param3.style.display = 'block';
+    isQuizFinished = true;
+    showScores();
   });
 }
 
 let quizInterval;
 
 function quizTimer() {
-  if (time === 0) {
+  if (time === 0 || isQuizFinished) {
     clearInterval(quizInterval);
     quizInterval = null;
     return;
@@ -163,7 +178,7 @@ startBtn.addEventListener('click', () => {
 
 // submit scores
 submitForm.addEventListener('submit', (e) => {
-  // debugger;
+  isQuizFinished = true;
   e.preventDefault();
 
   let playerObj = {
@@ -171,15 +186,18 @@ submitForm.addEventListener('submit', (e) => {
     score: myScore,
   };
   arr.push(playerObj);
-  const arrString = JSON.stringify(arr);
-  localStorage.setItem('users', arrString);
+
   arr = arr.sort((a, b) => {
     return b.score - a.score;
   });
+  const arrString = JSON.stringify(arr);
+  localStorage.setItem('users', arrString);
+
   console.log(arr);
   highScoreContainer.style.display = 'block';
-  highScoreDisplay.innerText = `${arr[0].initials} : ${arr[0].score}`;
   scoreBoard.style.display = 'none';
+  showScores();
+
   // console.log(formInput.value);
   // localStorage.setItem('initials', `${formInput.value}:${myScore}`);
   // const score = localStorage.getItem('initials');
@@ -190,7 +208,6 @@ submitForm.addEventListener('submit', (e) => {
 clrBtn.addEventListener('click', () => {
   localStorage.clear();
   highScoreDisplay.innerText = '';
-  console.log(clrBtn);
 });
 // highScoreDisplay.innerText = `${arr[0].initials} : ${arr[0].score}`;
 // console.log(clrBtn);
