@@ -81,6 +81,8 @@ function contentController(param1, param2, param3) {
     if (param1 == goBackBtn) {
       time = 50;
       timerScreen.innerText = `${time} s`;
+    }
+    if (param1 == highScoreBtn) {
       questionOptionContainer.style.display = 'none';
     }
     param2.style.display = 'none';
@@ -134,13 +136,17 @@ startBtn.addEventListener('click', () => {
   if (!quizInterval) {
     quizInterval = setInterval(quizTimer, 1000);
   }
-
-  // Creating container for questions and answers
-  elementCreator('div', main, 'q-o-container');
-
+  if (!questionOptionContainer) {
+    // Creating container for questions and answers
+    elementCreator('div', main, 'q-o-container');
+  }
   questionOptionContainer = document.querySelector('.q-o-container');
-  questionOptionContainer.classList.add('quiz__border-shadow');
+  questionOptionContainer.innerHTML = '';
 
+  questionOptionContainer.style.display = 'flex';
+  questionOptionContainer.classList.add('quiz__border-shadow');
+  questionNumber = 0;
+  formInput.value = '';
   // Question
   elementCreator('h3', questionOptionContainer, 'question-header');
 
